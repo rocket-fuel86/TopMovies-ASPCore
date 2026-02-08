@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Movie>
+
+<div class="container pt-5">
+    <h2>My top-10 movies</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Movie list is empty
+        </div>
+    }
+    else
+    {
+        <table class="movies-table">
+            <thead>
+                <tr>
+                    <th>Poster</th>
+                    <th>Title</th>
+                    <th>Director</th>
+                    <th>Genre</th>
+                    <th>Year</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var s in Model)
+                {
+                    <tr>
+                        <td class="name"><img width="200" src="@Url.Content(s.Poster)" alt="Alternate Text" /></td>
+                        <td class="name fw-bold">@s.Title</td>
+                        <td class="name">@s.Director</td>
+                        <td class="name">@s.Genre</td>
+                        <td class="name">@s.Year</td>
+                        <td class="name">@s.Description</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
