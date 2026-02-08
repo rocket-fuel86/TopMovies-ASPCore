@@ -18,6 +18,7 @@ namespace HW3
             var app = builder.Build();
 
             app.UseStaticFiles();
+            app.UseStatusCodePagesWithReExecute("/Error/404");
 
             app.MapControllerRoute(
                 name: "default",

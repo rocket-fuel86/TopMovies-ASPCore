@@ -1,51 +1,71 @@
-﻿@model IEnumerable<Movie>
+﻿@model IEnumerable<HW3.Models.Movie>
 
-<div class="container pt-5">
-    <h2>My top-10 movies</h2>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-    @if (!Model.Any())
-    {
-        <div class="alert alert-info">
-            Movie list is empty
-        </div>
-    }
-    else
-    {
-        <table class="movies-table">
-            <thead>
-                <tr>
-                    <th>Poster</th>
-                    <th>Title</th>
-                    <th>Director</th>
-                    <th>Genre</th>
-                    <th>Year</th>
-                    <th>Description</th>
-                    <th>Trailer</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var s in Model)
-                {
-                    <tr>
-                        <td class="name"><img width="200" src="@Url.Content(s.Poster)" alt="Alternate Text" /></td>
-                        <td class="name fw-bold">@s.Title</td>
-                        <td class="name">@s.Director</td>
-                        <td class="name">@s.Genre</td>
-                        <td class="name">@s.Year</td>
-                        <td class="name">@s.Description</td>
-                        <td>
-                            <iframe width="300" 
-                                    height="200" 
-                                    src="https://www.youtube.com/embed/@s.Trailer"
-                                    frameborder="0" 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                    referrerpolicy="strict-origin-when-cross-origin" 
-                                    allowfullscreen>
-                            </iframe>
-                        </td>
-                    </tr>
+<h1 class="text-center">My top-10 movies</h1>
+
+<p class="my-4 text-center">
+    <a class="btn btn-primary" asp-action="Create">Create New</a>
+</p>
+<table class="movies-table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Director)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Genre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Poster)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Trailer)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var movie in Model) {
+        <tr>
+            <td class="name"><img width="200" src="@Url.Content(movie.Poster)" alt="Alternate Text" /></td>
+            <td class="name fw-bold">@movie.Title</td>
+            <td class="name">@movie.Director</td>
+            <td class="name">@movie.Genre</td>
+            <td class="name">@movie.Year</td>
+            <td class="name">@movie.Description</td>
+            <td>
+                @if (movie.Trailer != null) {
+                    <iframe width="300"
+                            height="200"
+                            src="https://www.youtube.com/embed/@movie.Trailer"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen>
+                    </iframe>
                 }
-            </tbody>
-        </table>
-    }
-</div>
+            </td>
+            <td class="align-middle">
+                <div class="d-flex flex-column justify-content-center align-items-center gap-3">
+                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@movie.Id">Edit</a>
+                    <a class="btn btn-primary" asp-action="Details" asp-route-id="@movie.Id">Details</a>
+                    <a class="btn btn-primary" asp-action="Delete" asp-route-id="@movie.Id">Delete</a>
+                </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

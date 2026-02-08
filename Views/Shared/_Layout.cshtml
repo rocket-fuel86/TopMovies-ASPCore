@@ -12,7 +12,7 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                @Html.ActionLink("Movie list", "Index", "Movie", null, new { @class = "navbar-brand" })
+                @Html.ActionLink("Movies", "Index", "Movie", null, new { @class = "navbar-brand" })
             </div>
         </div>
     </div>
@@ -26,6 +26,6 @@
     </div>
 
     <script src="~/lib/jquery/dist/jquery.js"></script>
-
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
