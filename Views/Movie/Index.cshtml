@@ -20,6 +20,7 @@
                     <th>Genre</th>
                     <th>Year</th>
                     <th>Description</th>
+                    <th>Trailer</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,6 +33,16 @@
                         <td class="name">@s.Genre</td>
                         <td class="name">@s.Year</td>
                         <td class="name">@s.Description</td>
+                        <td>
+                            <iframe width="300" 
+                                    height="200" 
+                                    src="https://www.youtube.com/embed/@s.Trailer"
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                    referrerpolicy="strict-origin-when-cross-origin" 
+                                    allowfullscreen>
+                            </iframe>
+                        </td>
                     </tr>
                 }
             </tbody>
