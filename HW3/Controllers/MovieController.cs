@@ -1,28 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using HW3.BLL.DTO;
+using HW3.BLL.Interfaces;
+using HW3.BLL.Services;
+using HW3.DAL.Entities;
+using HW3.DAL.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using HW3.DAL.Models;
-using HW3.DAL.Entities;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HW3.Controllers
 {
     public class MovieController : Controller
     {
-        private readonly MovieContext _context;
+        private readonly IEntityService<MovieDTO> _movieService;
 
-        public MovieController(MovieContext context)
+        public MovieController(IEntityService<MovieDTO> movieService)
         {
-            _context = context;
+            _movieService = movieService;
         }
 
         // GET: Movie
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Movies.ToListAsync());
+            return View(await _movieService.GetAll());
         }
 
         // GET: Movie/Details/5
@@ -33,8 +37,7 @@ namespace HW3.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movies
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var movie = await _movieService.Get((int)id);
             if (movie == null)
             {
                 return NotFound();
@@ -54,12 +57,11 @@ namespace HW3.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Director,Genre,Year,Poster,Description,Trailer")] Movie movie)
+        public async Task<IActionResult> Create(MovieDTO movie)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(movie);
-                await _context.SaveChangesAsync();
+                await _movieService.Create(movie);
                 return RedirectToAction(nameof(Index));
             }
             return View(movie);
@@ -73,7 +75,7 @@ namespace HW3.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movies.FindAsync(id);
+            var movie = await _movieService.Get((int)id);
             if (movie == null)
             {
                 return NotFound();
@@ -86,31 +88,11 @@ namespace HW3.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Director,Genre,Year,Poster,Description,Trailer")] Movie movie)
+        public async Task<IActionResult> Edit(MovieDTO movie)
         {
-            if (id != movie.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(movie);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MovieExists(movie.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _movieService.Update(movie);
                 return RedirectToAction(nameof(Index));
             }
             return View(movie);
@@ -119,19 +101,19 @@ namespace HW3.Controllers
         // GET: Movie/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                if (id == null)
+                {
+                    return NotFound(); 
+                }
+                MovieDTO movie = await _movieService.Get((int)id);
+                return View(movie);
             }
-
-            var movie = await _context.Movies
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            catch (ValidationException ex)
             {
-                return NotFound();
+                return NotFound(ex.Message);
             }
-
-            return View(movie);
         }
 
         // POST: Movie/Delete/5
@@ -139,19 +121,8 @@ namespace HW3.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie != null)
-            {
-                _context.Movies.Remove(movie);
-            }
-
-            await _context.SaveChangesAsync();
+            await _movieService.Delete(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool MovieExists(int id)
-        {
-            return _context.Movies.Any(e => e.Id == id);
         }
     }
 }

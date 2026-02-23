@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="Common/Common.csproj" />
+  <Project Path="HW3.BLL/HW3.BLL.csproj" />
+  <Project Path="HW3.DAL/HW3.DAL.csproj" />
   <Project Path="HW3/HW3.csproj" />
 </Solution>

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HW3.DAL.Attributes
+namespace Common.Attributes
 {
     public class MovieYearAttribute : ValidationAttribute
     {

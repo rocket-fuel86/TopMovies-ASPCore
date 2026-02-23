@@ -8,7 +8,7 @@ namespace HW3.DAL.Interfaces
 {
     public interface IUnitOfWork
     {
-        IRepository<Movie> Teams { get; }
+        IRepository<Movie> Movies { get; }
         Task Save();
     }
 }

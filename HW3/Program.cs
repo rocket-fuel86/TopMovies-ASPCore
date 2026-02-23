@@ -1,4 +1,8 @@
-﻿using HW3.DAL.Models;
+﻿using HW3.BLL.DTO;
+using HW3.BLL.Infrastructure;
+using HW3.BLL.Interfaces;
+using HW3.BLL.Services;
+using HW3.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace HW3
@@ -11,7 +15,9 @@ namespace HW3
 
             string? connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
-            builder.Services.AddDbContext<MovieContext>(options => options.UseSqlServer(connection));
+            builder.Services.AddMovieContext(connection);
+            builder.Services.AddUnitOfWorkService();
+            builder.Services.AddTransient<IEntityService<MovieDTO>, MovieService>();
 
             builder.Services.AddControllersWithViews();
 
